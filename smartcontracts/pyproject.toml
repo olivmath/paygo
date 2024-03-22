@@ -1,0 +1,29 @@
+[project]
+name = "stellar-e2e"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Lucas Oliveira",email = "olivmath@protonmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.9,<4.0"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "stellar_e2e", from = "src"}]
+
+
+[tool.poetry.group.dev.dependencies]
+behave = "^1.2.6"
+pytest = "^8.3.5"
+pytest-bdd = "^8.1.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+stellar-sdk = {version = "^12.2.0", extras = ["soroban"]}
+requests = "^2.32.3"
