@@ -1,8 +1,22 @@
-# Next.js Multi-tenant Starter Template
+# Payments Stream: Real-Time Payroll with Second-by-Second Payments
 
-A minimalistic multi-tenant Next.js starter template with minimal setup and a modular design. Bring your own backend and database.
+- Video:
+- Repo: https://github.com/olivmath/paygo.git
+  
+# Problem
 
-[Demo](https://stack-template.vercel.app/)
+Waiting weeks to get paid is outdated. Traditional payroll systems follow rigid cycles (bi-weekly or monthly), causing financial stress, reliance on credit, and missed opportunities for employees.
+For companies: Slow, costly, and error-prone payroll processes, especially for international payments.
+Lack of flexibility: Employees lack access to real-time payments, cryptocurrencies, or rewards for waiting.
+No service offers second-by-second payments (Payments Stream).
+
+# Solution
+Streaming Payroll in Real-Time
+
+ ✅ Employees to track earnings by the minute and get paid daily
+ ✅ Companies to reduce payroll costs and optimize treasury management
+ ✅ Secure, transparent, and automated payments
+
 
 ## Landing Page
 
@@ -62,6 +76,5 @@ A minimalistic multi-tenant Next.js starter template with minimal setup and a mo
 - Dark mode
 
 ## Inspired by
-
-- [Shadcn UI](https://github.com/shadcn-ui/ui)
+- [PaltaLabs](https://github.com/paltalabs/hack-meridian))
 - [Shadcn Taxonomy](https://github.com/shadcn-ui/taxonomy)
