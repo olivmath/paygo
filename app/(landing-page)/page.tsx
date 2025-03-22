@@ -14,7 +14,7 @@ export default async function IndexPage() {
           <p className="font-bold text-xl">Setup Required</p>
           <p className="">
             {
-              "To start using this project, please enable client-side team creation in the Stack Auth dashboard (Project > Team Settings). This message will disappear once the feature is enabled."
+              "To start using this project, please enable client-side team creation in the Stack Auth dashboard (Project > Team Settings). This message will disappear once the feature is enabled.."
             }
           </p>
         </div>
