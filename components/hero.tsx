@@ -16,7 +16,7 @@ export function Hero(props: {
       <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
         <Link
           href={props.capsuleLink}
-          className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
+          className="neon-capsule rounded-2xl px-4 py-1.5 text-sm font-medium text-paygo-light"
           target="_blank"
         >
           {props.capsuleText}
