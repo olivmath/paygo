@@ -10,8 +10,6 @@ export function Hero(props: {
   credits?: React.ReactNode;
   primaryCtaText: string;
   primaryCtaLink: string;
-  secondaryCtaText: string;
-  secondaryCtaLink: string;
 }) {
   return (
     <section className="space-y-6 py-32 md:py-48 lg:py-52">
@@ -35,15 +33,6 @@ export function Hero(props: {
             className={cn(buttonVariants({ size: "lg" }))}
           >
             {props.primaryCtaText}
-          </Link>
-
-          <Link
-            href={props.secondaryCtaLink}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-          >
-            {props.secondaryCtaText}
           </Link>
         </div>
 

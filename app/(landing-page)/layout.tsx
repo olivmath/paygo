@@ -9,16 +9,16 @@ export default function Layout(props: { children: React.ReactNode }) {
           { title: "Home", href: "/" },
           { title: "Features", href: "/#features" },
           { title: "Pricing", href: "/#pricing" },
-          { title: "Github", href: "https://github.com/stack-auth/stack-template", external: true },
+          { title: "Github", href: "https://github.com/olivmath/paygo", external: true },
         ]}
       />
       <main className="flex-1">{props.children}</main>
       <Footer
         builtBy="Stack Auth"
         builtByLink="https://stack-auth.com/"
-        githubLink="https://github.com/stack-auth/stack-template"
-        twitterLink="https://twitter.com/stack_auth"
-        linkedinLink="linkedin.com/company/stack-auth"
+        githubLink="https://github.com/olivmah/paygo"
+        twitterLink="https://twitter.com/olivmath_"
+        linkedinLink="https://linkedin.com/company/paygo-web3"
       />
     </div>
   );

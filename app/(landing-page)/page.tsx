@@ -26,26 +26,11 @@ export default async function IndexPage() {
     <>
       <Hero
         capsuleText="100% Open-source & Free"
-        capsuleLink="https://stacktemplate.com"
-        title="A Multi-tenant Next.js Starter Template"
-        subtitle="Built for developers, by developers. Next.js + Shadcn UI + Stack Auth."
+        capsuleLink="https://github.com/olivmath/paygo"
+        title="Payments Stream: second-by-second"
+        subtitle="For companies we convert payroll costs into investments, so employees earn their wages instantly."
         primaryCtaText="Get Started"
-        primaryCtaLink={stackServerApp.urls.signUp}
-        secondaryCtaText="GitHub"
-        secondaryCtaLink="https://github.com/stack-auth/stack-template"
-        credits={
-          <>
-            Crafted with ❤️ by{" "}
-            <a
-              href="https://stack-auth.com"
-              target="_blank"
-              rel="noreferrer"
-              className="underline"
-            >
-              Stack Auth
-            </a>
-          </>
-        }
+        primaryCtaLink={stackServerApp.urls.signUp} 
       />
 
       <div id="features" />
