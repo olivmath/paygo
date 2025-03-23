@@ -3,7 +3,7 @@
 - Video:
 - Repo: https://github.com/olivmath/paygo.git
 - LinkedIn: https://www.linkedin.com/company/paygo-web3
-  
+
 # Problem
 
 Waiting weeks to get paid is outdated. Traditional payroll systems follow rigid cycles (bi-weekly or monthly), causing financial stress, reliance on credit, and missed opportunities for employees.
@@ -12,12 +12,12 @@ Lack of flexibility: Employees lack access to real-time payments, cryptocurrenci
 No service offers second-by-second payments (Payments Stream).
 
 # Solution
+
 Streaming Payroll in Real-Time
 
- ✅ Employees to track earnings by the minute and get paid daily
- ✅ Companies to reduce payroll costs and optimize treasury management
- ✅ Secure, transparent, and automated payments
-
+- ✅ Employees to track earnings by the minute and get paid daily
+- ✅ Companies to reduce payroll costs and optimize treasury management
+- ✅ Secure, transparent, and automated payments
 
 ## Landing Page
 
@@ -41,25 +41,39 @@ Streaming Payroll in Real-Time
 
 1. Clone the repository
 
-    ```bash
-    git clone git@github.com:stack-auth/stack-template.git
-    ```
+   ```bash
+   git clone git@github.com:stack-auth/stack-template.git
+   ```
 
 2. Install dependencies
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 3. Register an account on [Stack Auth](https://stack-auth.com), copy the keys from the dashboard, and paste them into the `.env.local` file. Then, enable "client team creation" on the team settings tab.
 
-    If you want to learn more about Stack Auth or self-host it, check out the [Docs](https://docs.stack-auth.com) and [GitHub](https://github.com/stack-auth/stack).
+   If you want to learn more about Stack Auth or self-host it, check out the [Docs](https://docs.stack-auth.com) and [GitHub](https://github.com/stack-auth/stack).
 
 4. Start the development server and go to [http://localhost:3000](http://localhost:3000)
 
-    ```bash
-    npm run dev 
-    ```
+   ```bash
+   npm run dev
+   ```
+
+## Tech diagrams
+
+- Sequence Diagram
+
+![](./assets/sequence-diagram.png)
+
+- Architecture Diagram
+
+![](./assets/all.png)
+
+- Hands-on diagram
+
+![](./assets/hands-on.jpg)
 
 ## Features & Tech Stack
 
@@ -71,5 +85,6 @@ Streaming Payroll in Real-Time
 - Dark mode
 
 ## Inspired by
+
 - [PaltaLabs](https://github.com/paltalabs/hack-meridian)
 - [SStream](https://github.com/rahimklaber/SStream)
