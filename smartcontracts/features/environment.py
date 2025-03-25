@@ -1,7 +1,4 @@
-import subprocess
-import time
-import requests
-from stellar_sdk import Network
+from stellar_sdk import Network, SorobanServer
 
 
 def start_stellar_node():
@@ -15,7 +12,12 @@ def stop_stellar_node():
 def before_all(context):
     # Global setup code that runs before all features
     context.stellar_url = "http://localhost:8000"
-    context.network_passphrase = (Network.STANDALONE_NETWORK_PASSPHRASE,)
+    context.network_passphrase = Network.STANDALONE_NETWORK_PASSPHRASE
+    context.wallets = {}
+    context.contracts = {}
+    context.contracts["wasm_hash"] = {}
+    context.contracts["contract_id"] = {}
+    context.soroban_server = SorobanServer("http://localhost:8000/soroban/rpc")
 
     # Start Stellar node
     start_stellar_node()
