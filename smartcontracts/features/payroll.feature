@@ -5,8 +5,8 @@ Feature: Stellar Payroll System
 
     Background:
         Given the Stellar network is running
-        And I have an admin wallet funded
-        And I have an owner wallet funded
+        And I have a "admin" wallet funded
+        And I have a "owner" wallet funded
         And I have a list of 100 employees with total budget of 100K USDC
         And all contracts are successfully compiled
 
