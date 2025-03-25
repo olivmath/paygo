@@ -5,17 +5,26 @@ Feature: Stellar Payroll System
 
     Background:
         Given the Stellar network is running
-        And I have a "admin" wallet funded
-        And I have a "owner" wallet funded
+        And I create a wallet from "SDFHKE7ABNQKSCADYBS35SY44AVBT7DTHWFQTXUGMWBVSO5LO53R52LC" called "admin" and funded
+        And I create a wallet from "SAYLONVIPX22DMUBPQ3OYG4QRSZSTN7HGF4CTVGHKPKE3MO5L6K3DLIC" called "owner" and funded
         And I have a list of 100 employees with total budget of 100K USDC
         And all contracts are successfully compiled
 
-    Scenario: Deploy contracts and process payroll
-        Given admin uploads the company contract to Stellar
-        And admin upload and deploy the USDC contract
-        And admin upload and deploy the PayGo contract
-        When owner approves 100K USDC to PayGo contract
-        And owner creates a company with the employee list
-        And owner retrieves the company contract account ID
-        And owner calls pay_employees on the company contract
-        Then all 100 employee wallets should receive their correct payment 
+    Scenario: Deploy contracts and create company
+        Given "admin" upload the "company" contract to Stellar
+        And "admin" upload the "token" contract to Stellar
+        And "admin" upload the "paygo" contract to Stellar
+        And admin create the token contract
+        And admin create the paygo contract
+        And admin mint 200K USDC token to owner
+
+        When owner approves 100K USDC to paygo
+        And owner create a company called "Petrobras" in the paygo passing all 100 employee
+        
+        Then the paygo must have create a company called "Petrobras"
+        And with 100 employees
+        And with 100K USDC of total cost
+        And with 100K USDC of reserve deposited
+        And return the contract id to owner
+    
+    # Scenario: Pay all employees in process payroll
