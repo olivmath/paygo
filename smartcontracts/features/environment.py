@@ -6,18 +6,16 @@ from stellar_sdk import Network
 
 def start_stellar_node():
     """Start the Stellar node container"""
-    print("✅ Are you start Stellar node?")
 
 
 def stop_stellar_node():
     """Stop the Stellar node container"""
-    print("🎬 Dont forget of stop Stellar node!")
 
 
 def before_all(context):
     # Global setup code that runs before all features
     context.stellar_url = "http://localhost:8000"
-    context.network_passphrase = Network.STANDALONE_NETWORK_PASSPHRASE,
+    context.network_passphrase = (Network.STANDALONE_NETWORK_PASSPHRASE,)
 
     # Start Stellar node
     start_stellar_node()

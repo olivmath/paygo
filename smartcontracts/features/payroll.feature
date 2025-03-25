@@ -8,6 +8,7 @@ Feature: Stellar Payroll System
         And I have an admin wallet funded
         And I have an owner wallet funded
         And I have a list of 100 employees with total budget of 100K USDC
+        And all contracts are successfully compiled
 
     Scenario: Deploy contracts and process payroll
         Given admin uploads the company contract to Stellar

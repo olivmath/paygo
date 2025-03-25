@@ -3,6 +3,7 @@ from stellar_sdk import Server, Keypair, Network
 from typing import List, Dict
 import requests
 import subprocess
+import os
 
 
 # Helper functions
@@ -108,7 +109,7 @@ def step_check_stellar_network(context):
         response = requests.get(f"{context.stellar_url}")
         assert response.status_code == 200, "stellar RPC not accessible"
     except Exception as e:
-        raise AssertionError(f"Stellar network not accessible: {str(e)}")
+        raise AssertionError(f"🔴 Node Stellar are running? ERROR: {str(e)}")
 
 
 @given("I have an admin wallet funded")
@@ -323,3 +324,38 @@ def step_verify_payments(context):
             raise AssertionError(
                 f"Failed to verify payment for {employee['name']}: {str(e)}"
             )
+
+
+@given("all contracts are successfully compiled")
+def step_validate_contract_compilation(context):
+    """Validate that all contracts are successfully compiled"""
+    contracts = [
+        "contracts/company",
+        "contracts/paygo",
+        "contracts/token",  # Corrigido de 'usdc' para 'token'
+    ]
+
+    for contract_path in contracts:
+        contract_name = contract_path.split("/")[-1]
+        try:
+            result = subprocess.run(
+                ["cargo", "build", "--target", "wasm32-unknown-unknown", "--release"],
+                cwd=contract_path,
+                text=True,
+                check=True,
+            )
+
+            wasm_path = os.path.join(
+                contract_path,
+                "../../target/wasm32-unknown-unknown/release",
+                f"{contract_name}.wasm",
+            )
+            wasm_path = os.path.normpath(wasm_path)
+
+            if not os.path.exists(wasm_path):
+                raise AssertionError(f"WASM file not found at {wasm_path}")
+
+        except subprocess.CalledProcessError as e:
+            raise AssertionError(f"Failed to compile {contract_name}: {e.stderr}")
+        except Exception as e:
+            raise AssertionError(f"Error validating {contract_name}: {str(e)}")
