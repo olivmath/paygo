@@ -1,5 +1,7 @@
+import requests 
 from stellar_sdk import Server, Network
-import requests
+from behave import given
+
 
 @given("the Stellar network is running")
 def step_check_stellar_network(context):
@@ -10,4 +12,4 @@ def step_check_stellar_network(context):
         response = requests.get(f"{context.stellar_url}")
         assert response.status_code == 200, "Stellar RPC not accessible"
     except Exception as e:
-        raise AssertionError(f"🔴 Node Stellar are running? ERROR: {str(e)}") 
+        raise AssertionError(f"🔴 Node Stellar are running? ERROR: {str(e)}")
