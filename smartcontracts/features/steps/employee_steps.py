@@ -1,3 +1,5 @@
+from behave import given
+
 from stellar_sdk import Keypair
 
 def generate_random_account_id() -> str:
