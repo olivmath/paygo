@@ -6,3 +6,7 @@ target
 .stellar
 .venv
 
+# Python's cache
+
+*pyc
+*pycache*
