@@ -10,8 +10,8 @@ def step_impl(context, wallet_priv, wallet_name):
     keypair = Keypair.from_secret(wallet_priv)
 
     context.wallets[wallet_name] = {
-        "prv": keypair.public_key,
-        "pub": keypair.secret,
+        "pub": keypair.public_key,
+        "prv": keypair.secret,
         "keypair": keypair,
     }
 
