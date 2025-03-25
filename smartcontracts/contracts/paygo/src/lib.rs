@@ -7,16 +7,16 @@ mod test;
 use error::Error;
 use soroban_sdk::token::Client as TokenClient;
 use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, IntoVal, Symbol, Val, Vec};
-use storage::{Employee, EmployeeInput, PAY_BLOCK, USDC, WASM};
+use storage::{Employee, EmployeeInput, PAY_BLOCK, USDC, COMP_WASM};
 
 #[contract]
 pub struct PayGo;
 
 #[contractimpl]
 impl PayGo {
-    pub fn __constructor(e: Env, usdc: Address, wasm_hash: BytesN<32>) -> Result<(), Error> {
+    pub fn __constructor(e: Env, usdc: Address, company_wasm_hash: BytesN<32>) -> Result<(), Error> {
         e.storage().instance().set(&USDC, &usdc);
-        e.storage().instance().set(&WASM, &wasm_hash);
+        e.storage().instance().set(&COMP_WASM, &company_wasm_hash);
         e.storage().instance().set(&PAY_BLOCK, &432_000);
         Ok(())
     }
@@ -70,10 +70,10 @@ impl PayGo {
         }
 
         // get wasm hash
-        let wasm_hash = e
+        let company_wasm_hash = e
             .storage()
             .instance()
-            .get::<Symbol, BytesN<32>>(&WASM)
+            .get::<Symbol, BytesN<32>>(&COMP_WASM)
             .unwrap();
 
         // mount company with data
@@ -91,7 +91,7 @@ impl PayGo {
         let deployed_address = &e
             .deployer()
             .with_address(e.current_contract_address(), salt)
-            .deploy_v2(wasm_hash, constructor_args);
+            .deploy_v2(company_wasm_hash, constructor_args);
 
         // transfer balance from owner to company contract
         token_client.transfer_from(
