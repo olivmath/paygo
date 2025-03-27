@@ -1,16 +1,17 @@
+import logging
 from stellar_sdk import Network, SorobanServer
-
 
 def start_stellar_node():
     """Start the Stellar node container"""
-
+    pass  # Implemente conforme necessário
 
 def stop_stellar_node():
     """Stop the Stellar node container"""
-
+    pass  # Implemente conforme necessário
 
 def before_all(context):
-    # Global setup code that runs before all features
+    """Configuração global antes de todos os testes"""
+    # Configuração do ambiente
     context.stellar_url = "http://localhost:8000"
     context.network_passphrase = Network.STANDALONE_NETWORK_PASSPHRASE
     context.wallets = {}
@@ -19,27 +20,20 @@ def before_all(context):
     context.contracts["contract_id"] = {}
     context.soroban_server = SorobanServer("http://localhost:8000/soroban/rpc")
 
-    # Start Stellar node
-    start_stellar_node()
-
-
 def after_all(context):
-    # Global cleanup code that runs after all features
+    # Cleanup global após todos os testes
     stop_stellar_node()
 
-
 def before_feature(context, feature):
-    # Setup code that runs before each feature
-    pass
-
+    # Setup antes de cada feature
+    ...
 
 def after_feature(context, feature):
-    # Cleanup code that runs after each feature
-    pass
-
+    # Cleanup após cada feature
+    ...
 
 def before_scenario(context, scenario):
-    # Reset any scenario-specific data
+    # Reset antes de cada cenário
     context.employees = []
     context.admin_keypair = None
     context.owner_keypair = None
@@ -48,7 +42,6 @@ def before_scenario(context, scenario):
     context.paygo_contract_id = None
     context.company_account_id = None
 
-
 def after_scenario(context, scenario):
-    # Cleanup any scenario-specific data
-    pass
+    # Cleanup após cada cenário
+    ...

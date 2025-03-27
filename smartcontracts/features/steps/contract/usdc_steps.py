@@ -1,7 +1,7 @@
 from behave import given, when
 from features.steps.contract.utils_steps import (
     deployer_create_the_contract_with_args,
-    invoke_contract_function,
+    invoke_contract_function_cli,
     get_current_ledger_number,
 )
 
@@ -30,7 +30,7 @@ def step_impl(context):
     owner_public_key = context.wallets["owner"]["pub"]
 
     # Mint 200,000 USDC (with 2 decimals, so 20000000)
-    invoke_contract_function(
+    invoke_contract_function_cli(
         context,
         "token",
         admin_keypair,
@@ -52,7 +52,7 @@ def step_impl(context):
     expiration_ledger = current_ledger + 4000
 
     # Approve 100,000 USDC (with 2 decimals, so 10000000)
-    invoke_contract_function(
+    invoke_contract_function_cli(
         context,
         "token",
         owner_keypair,

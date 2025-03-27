@@ -263,7 +263,7 @@ def deployer_create_the_contract_with_args(context, deployer, contract_name, *ar
     )
 
 
-def invoke_contract_function(
+def invoke_contract_function_cli(
     context,
     contract_name: str,
     source_keypair: Keypair,
@@ -315,7 +315,6 @@ def get_current_ledger_number(context) -> int:
     """
     try:
         latest_ledger = context.soroban_server.get_latest_ledger()
-        print(latest_ledger)
         return latest_ledger.sequence
     except Exception as e:
         raise Exception(f"Failed to get current ledger number: {str(e)}")
