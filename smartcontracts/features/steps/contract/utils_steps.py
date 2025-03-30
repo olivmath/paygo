@@ -38,13 +38,13 @@ def get_wasm_path(contract_path: str) -> str:
     return os.path.normpath(wasm_path)
 
 
-def upload_wasm_via_sdk(context, wasm_path: str, admin_keypair: Keypair) -> str:
+def upload_wasm_via_sdk(context, wasm_path: str, deployer: Keypair) -> str:
     """Upload contract WASM to Stellar network
 
     Args:
         context: Behave context containing server info
         wasm_path: Path to the WASM file
-        admin_keypair: Keypair of the admin account
+        deployer: Keypair of the admin account
 
     Returns:
         str: The WASM ID of the uploaded contract
@@ -56,7 +56,7 @@ def upload_wasm_via_sdk(context, wasm_path: str, admin_keypair: Keypair) -> str:
     f.close()
 
     # Build transaction
-    source_account = context.server.load_account(admin_keypair.public_key)
+    source_account = context.server.load_account(deployer.public_key)
     tx = (
         TransactionBuilder(
             source_account=source_account,
@@ -75,7 +75,7 @@ def upload_wasm_via_sdk(context, wasm_path: str, admin_keypair: Keypair) -> str:
         raise Exception(
             f"Failed to prepare transaction: {e.simulate_transaction_response}"
         )
-        tx.sign(admin_keypair)
+    tx.sign(deployer)
 
     # Send transaction
     try:
@@ -100,13 +100,13 @@ def upload_wasm_via_sdk(context, wasm_path: str, admin_keypair: Keypair) -> str:
         raise Exception(f"Transaction failed: {get_transaction_data.result_xdr}")
 
 
-def create_wasm_sdk(context, wasm_hash: str, admin_keypair: Keypair) -> str:
+def create_wasm_sdk(context, wasm_hash: str, deployer: Keypair) -> str:
     """Create contract instance from uploaded WASM
 
     Args:
         context: Behave context containing server info
         wasm_hash: WASM ID from uploaded contract
-        admin_keypair: Keypair of the admin account
+        deployer: Keypair of the admin account
 
     Returns:
         str: The contract ID of the created instance
@@ -114,7 +114,7 @@ def create_wasm_sdk(context, wasm_hash: str, admin_keypair: Keypair) -> str:
     soroban_server = SorobanServer(context.stellar_url)
 
     # Build transaction
-    source_account = context.server.load_account(admin_keypair.public_key)
+    source_account = context.server.load_account(deployer.public_key)
     tx = (
         TransactionBuilder(
             source_account=source_account,
@@ -122,16 +122,14 @@ def create_wasm_sdk(context, wasm_hash: str, admin_keypair: Keypair) -> str:
             base_fee=100,
         )
         .set_timeout(300)
-        .append_create_contract_op(
-            wasm_hash=wasm_hash, address=admin_keypair.public_key
-        )
+        .append_create_contract_op(wasm_hash=wasm_hash, address=deployer.public_key)
         .build()
     )
 
     # Prepare and sign transaction
     try:
         tx = soroban_server.prepare_transaction(tx)
-        tx.sign(admin_keypair)
+        tx.sign(deployer)
     except PrepareTransactionException as e:
         raise Exception(
             f"Failed to prepare transaction: {e.simulate_transaction_response}"
@@ -161,12 +159,12 @@ def create_wasm_sdk(context, wasm_hash: str, admin_keypair: Keypair) -> str:
         raise Exception(f"Transaction failed: {get_transaction_data.result_xdr}")
 
 
-def upload_wasm_via_cli(context, wasm_path: str, admin_keypair: Keypair) -> str:
+def upload_wasm_via_cli(context, wasm_path: str, deployer: Keypair) -> str:
     """Upload contract WASM to Stellar network using CLI
 
     Args:
         wasm_path: Path to the WASM file
-        admin_keypair: Keypair of the admin account
+        deployer: Keypair of the admin account
 
     Returns:
         str: The WASM ID of the uploaded contract
@@ -179,7 +177,7 @@ def upload_wasm_via_cli(context, wasm_path: str, admin_keypair: Keypair) -> str:
         "--wasm",
         wasm_path,
         "--source",
-        admin_keypair.secret,
+        deployer.secret,
     ]
 
     # Execute the command
@@ -305,14 +303,7 @@ def invoke_contract_function_cli(
 
 
 def get_current_ledger_number(context) -> int:
-    """Get the current ledger number from the Stellar network
-
-    Args:
-        context: Behave context containing server info
-
-    Returns:
-        int: Current ledger number
-    """
+    """Get the current ledger number from the Stellar network"""
     try:
         latest_ledger = context.soroban_server.get_latest_ledger()
         return latest_ledger.sequence

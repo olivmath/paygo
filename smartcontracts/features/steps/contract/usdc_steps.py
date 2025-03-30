@@ -16,7 +16,7 @@ def step_impl(context):
         "--admin",
         public_key,
         "--decimal",
-        "2",
+        "7",
         "--name",
         "dolar token",
         "--symbol",

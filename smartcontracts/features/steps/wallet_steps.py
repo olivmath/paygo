@@ -4,10 +4,10 @@ from stellar_sdk import Keypair
 import requests
 
 
-@given('I create a wallet from "{wallet_priv}" called "{wallet_name}" and funded')
-def step_impl(context, wallet_priv, wallet_name):
+@given('I create a wallet from "{private_key}" called "{wallet_name}" and funded')
+def step_impl(context, private_key, wallet_name):
     """Create a wallet from a given seed and assign it a name."""
-    keypair = Keypair.from_secret(wallet_priv)
+    keypair = Keypair.from_secret(private_key)
 
     context.wallets[wallet_name] = {
         "pub": keypair.public_key,
