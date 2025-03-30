@@ -25,7 +25,7 @@ impl Company {
     pub fn __constructor(
         e: Env,
         name: Symbol,
-        description: Symbol,
+        description: String,
         employees: Vec<Employee>,
         owner: Address,
         usdc: Address,

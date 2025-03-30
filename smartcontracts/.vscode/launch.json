@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Test Debugger: Python File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["-m", "pytest"],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}
