@@ -1,5 +1,5 @@
 [package]
-name = "token"
+name = "soroban-workspace-token"
 description = ""
 version = "1.0.0"
 edition = "2021"

@@ -1,5 +1,5 @@
 [package]
-name = "company"
+name = "soroban-workspace-company"
 version = "1.0.0"
 edition = "2021"
 publish = false
