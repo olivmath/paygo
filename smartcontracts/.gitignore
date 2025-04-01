@@ -6,6 +6,8 @@ target
 .stellar
 .venv
 
+test_snapshots
+
 # Python's cache
 
 *pyc

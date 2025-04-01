@@ -1,7 +1,7 @@
 #![cfg(test)]
 extern crate std;
 
-use crate::{contract::Token, TokenClient};
+use crate::contract::{Token, TokenClient};
 use soroban_sdk::{
     symbol_short,
     testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation},
@@ -269,5 +269,5 @@ fn test_zero_allowance() {
     let token = create_token(&e, &admin);
 
     token.transfer_from(&spender, &from, &spender, &0);
-    assert!(token.get_allowance(&from, &spender).is_none());
+    assert!(token.allowance(&from, &spender)==0);
 }
