@@ -37,29 +37,31 @@ Streaming Payroll in Real-Time
 <img src="assets/Company.png" alt="Teams" width="400"/>
 </div>
 
-## Getting Started
+## How to Run (Local)
 
-1. Clone the repository
+1. Run full node
 
-   ```bash
-   git clone git@github.com:stack-auth/stack-template.git
-   ```
+```bash
+docker run --rm -p 8000:8000 --name stellar stellar/quickstart --local --enable-soroban-rpc
+```
 
 2. Install dependencies
 
-   ```bash
-   npm install
-   ```
+```bash
+cd frontend && npm i
+```
 
-3. Register an account on [Stack Auth](https://stack-auth.com), copy the keys from the dashboard, and paste them into the `.env.local` file. Then, enable "client team creation" on the team settings tab.
+3. Run project
 
-   If you want to learn more about Stack Auth or self-host it, check out the [Docs](https://docs.stack-auth.com) and [GitHub](https://github.com/stack-auth/stack).
+```bash
+npm run dev
+```
 
-4. Start the development server and go to [http://localhost:3000](http://localhost:3000)
+4. Deploy smart contracts
 
-   ```bash
-   npm run dev
-   ```
+```bash
+cd smartcontracts && deploy-local-all.sh
+```
 
 ## Tech diagrams
 
@@ -74,15 +76,6 @@ Streaming Payroll in Real-Time
 - Hands-on diagram
 
 ![](./assets/hands-on.jpg)
-
-## Features & Tech Stack
-
-- Next.js 14 app router
-- TypeScript
-- Tailwind & Shadcn UI
-- Stack Auth
-- Multi-tenancy (teams/orgs)
-- Dark mode
 
 ## Inspired by
 
