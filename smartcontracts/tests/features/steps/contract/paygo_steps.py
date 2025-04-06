@@ -219,22 +219,67 @@ def step_impl(context):
 
 
 @then('the paygo must have create a company called "Petrobras"')
-def step_impl(context):
-    raise NotImplementedError(
-        'STEP: Then the paygo must have create a company called "Petrobras"'
+def step_verify_company_name(context):
+    """Verify that the company was created with the correct name"""
+    owner_keypair = context.wallets["owner"]["keypair"]
+
+    # Convert parameters to SCVal format
+    company_name_scval = scval.to_symbol("Petrobras")
+
+    # Call the contract to get company details
+    params = [company_name_scval]
+
+    result = invoke_contract_function_sdk(
+        context,
+        contract_name="paygo",
+        source_keypair=owner_keypair,
+        function_name="get_company",
+        params=params,
     )
+
+    assert result is not None, "Company not found"
+    assert result["name"] == "Petrobras", f"Company name mismatch: {result['name']}"
 
 
 @then("with {number} employees")
-def step_impl(context, number):
-    raise NotImplementedError(f"STEP: Then with {number} employees")
+def step_verify_employee_count(context, number):
+    """Verify that the company has the correct number of employees"""
+    expected_count = int(number)
+    assert (
+        len(context.employees) == expected_count
+    ), f"Expected {expected_count} employees, but found {len(context.employees)}"
 
 
 @then("with 100K USDC of total cost")
-def step_impl(context):
-    raise NotImplementedError("STEP: Then with 100K USDC of total cost")
+def step_verify_total_cost(context):
+    """Verify that the total cost matches 100K USDC"""
+    total_cost = sum(emp["budget"] for emp in context.employees)
+    assert (
+        total_cost == 100000
+    ), f"Expected total cost of 100000 USDC, but found {total_cost} USDC"
 
 
 @then("with 100K USDC of reserve deposited")
-def step_impl(context):
-    raise NotImplementedError("STEP: Then with 100K USDC of reserve deposited")
+def step_verify_reserve(context):
+    """Verify that the company has 100K USDC in reserve"""
+    owner_keypair = context.wallets["owner"]["keypair"]
+
+    # Convert parameters to SCVal format
+    company_name_scval = scval.to_symbol("Petrobras")
+
+    # Call the contract to get company details
+    params = [company_name_scval]
+
+    result = invoke_contract_function_sdk(
+        context,
+        contract_name="paygo",
+        source_keypair=owner_keypair,
+        function_name="get_company_reserve",
+        params=params,
+    )
+
+    # Convert from stroops to USDC (1 USDC = 10000000 stroops)
+    reserve_usdc = result / 10000000
+    assert (
+        reserve_usdc == 100000
+    ), f"Expected reserve of 100000 USDC, but found {reserve_usdc} USDC"
