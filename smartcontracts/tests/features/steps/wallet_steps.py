@@ -1,21 +1,18 @@
 from behave import given
-
 from stellar_sdk import Keypair
-import requests
+from .utils.wallets.fund_account import deposit_fund
 
 
-@given('I create a wallet from "{private_key}" called "{wallet_name}" and funded')
-def step_impl(context, private_key, wallet_name):
-    """Create a wallet from a given seed and assign it a name."""
-    keypair = Keypair.from_secret(private_key)
+@given("the following wallets are created and funded")
+def step_create_and_fund_wallets(context):
+    """
+    Create and fund wallets based on the data table
+    """
+    for row in context.table:
+        secret = row["secret"]
+        role = row["role"]
+        keypair = Keypair.from_secret(secret)
 
-    context.wallets[wallet_name] = {
-        "pub": keypair.public_key,
-        "prv": keypair.secret,
-        "keypair": keypair,
-    }
+        context.wallets[role] = {"keypair": keypair, "pub": keypair.public_key}
 
-    try:
-        requests.get(f"{context.stellar_url}/friendbot?addr={keypair.public_key}")
-    except Exception as e:
-        raise AssertionError(f"Could not fund {wallet_name} wallet: {str(e)}")
+        deposit_fund(context, keypair.public_key)

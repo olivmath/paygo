@@ -1,4 +1,4 @@
-import requests 
+import requests
 from stellar_sdk import Server, Network
 from behave import given
 

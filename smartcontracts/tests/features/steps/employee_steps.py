@@ -1,13 +1,6 @@
 from behave import given
 
 import requests
-from stellar_sdk import Keypair
-
-
-def generate_random_account_id() -> str:
-    """Generate a random Stellar account ID"""
-    return Keypair.random().public_key
-
 
 def create_employee_list(context, count: int) -> list[dict]:
     """Create a list of employees with random account IDs and distributed budget"""
