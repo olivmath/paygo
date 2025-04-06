@@ -17,15 +17,15 @@ Feature: Stellar Payroll System
             | Employee2 | 10000  |
             | Employee3 | 10000  |
         And all smart contracts are compiled successfully
-        When admin updated the following contracts:
+        When admin upload the following contracts:
             | contract |
             | company  |
             | token    |
             | paygo    |
         And admin deploys the following contracts:
-            | contract | initialization                  |
-            | token    | name=USDC,symbol=USDC,decimal=7 |
-            | paygo    | usdc=token,company=company      |
+            | contract | initialization                                                                                  |
+            | token    | GA3AW3ABNSYDLDR3XDKO72HRAPBUJYXGMFS36OSNXGTSSLPZZNB2MJBI:Address,7:u32,Dolar Token:String,USDC:String |
+        And admin deploys paygo contracts with token address and company wasm_id
         And admin mints "200000" USDC tokens to owner
         And owner approves "100000" USDC to paygo contract
         Then all contracts should be deployed successfully
