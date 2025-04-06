@@ -18,7 +18,7 @@ def before_all(context):
     context.network_passphrase = Network.STANDALONE_NETWORK_PASSPHRASE
     context.wallets = {}
     context.contracts = {}
-    context.contracts["wasm_hash"] = {}
+    context.contracts["wasm_hash_id"] = {}
     context.contracts["contract_id"] = {}
     context.soroban_server = SorobanServer("http://localhost:8000/soroban/rpc")
 

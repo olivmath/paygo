@@ -17,6 +17,7 @@ def step_create_employee_list_with_details(context):
         }
         context.employees.append(employee)
         deposit_fund(context, employee["account_id"])
+        print(f"{employee["name"]}: {employee['account_id']}")
 
     # Store total budget for later verification
     context.total_employee_budget = sum(emp["budget"] for emp in context.employees)
