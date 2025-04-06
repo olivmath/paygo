@@ -1,6 +1,6 @@
 from behave import given
 from stellar_sdk import Keypair
-from .utils.wallets.fund_account import deposit_fund
+from utils.wallets.fund_account import deposit_fund
 
 
 @given("the following wallets are created and funded")
