@@ -38,7 +38,7 @@ def step_verify_contracts_compiled(context):
         subprocess.run(
             ["cargo", "build", "--target", "wasm32-unknown-unknown", "--release"],
             check=True,
-            capture_output=True,
+            text=True,
         )
     except subprocess.CalledProcessError as e:
         raise AssertionError(f"Failed to build contract : {e.stderr}")

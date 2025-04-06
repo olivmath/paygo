@@ -11,6 +11,7 @@ from stellar_sdk.soroban_rpc import GetTransactionStatus, SendTransactionStatus
 from stellar_sdk.exceptions import PrepareTransactionException
 import subprocess
 import os
+from base64 import b64decode
 
 
 def build_contract(contract_path: str) -> None:
@@ -309,3 +310,33 @@ def get_current_ledger_number(context) -> int:
         return latest_ledger.sequence
     except Exception as e:
         raise Exception(f"Failed to get current ledger number: {str(e)}")
+
+
+def decode_error_xdr(error_xdr: str) -> str:
+    """
+    Decode a Stellar error XDR string into a human readable message
+    """
+    try:
+        # Decode the base64 XDR
+        decoded = stellar_xdr.TransactionResult.from_xdr(error_xdr)
+        
+        # Get the result code
+        result_code = decoded.result.code
+        
+        if result_code == stellar_xdr.TransactionResultCode.txFAILED:
+            # Get the operations results
+            ops_results = decoded.result.results
+            
+            # Get the first failed operation result
+            for op_result in ops_results:
+                if op_result.tr.code != stellar_xdr.OperationResultCode.opINNER:
+                    return f"Transaction failed: {op_result.tr.code.name}"
+                
+                # Get the inner result code
+                inner_code = op_result.tr.inner_result().code
+                return f"Operation failed: {inner_code.name}"
+        
+        return f"Transaction failed: {result_code.name}"
+        
+    except Exception as e:
+        return f"Failed to decode error XDR: {str(e)}"
