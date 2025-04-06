@@ -2,7 +2,35 @@ from stellar_sdk import TransactionBuilder, xdr as stellar_xdr
 from stellar_sdk.exceptions import PrepareTransactionException
 from stellar_sdk.soroban_rpc import GetTransactionStatus, SendTransactionStatus
 
-from tests.features.steps.contract.utils_steps import decode_error_xdr
+
+def decode_error_xdr(error_xdr: str) -> str:
+    """
+    Decode a Stellar error XDR string into a human readable message
+    """
+    try:
+        # Decode the base64 XDR
+        decoded = stellar_xdr.TransactionResult.from_xdr(error_xdr)
+
+        # Get the result code
+        result_code = decoded.result.code
+
+        if result_code == stellar_xdr.TransactionResultCode.txFAILED:
+            # Get the operations results
+            ops_results = decoded.result.results
+
+            # Get the first failed operation result
+            for op_result in ops_results:
+                if op_result.tr.code != stellar_xdr.OperationResultCode.opINNER:
+                    return f"Transaction failed: {op_result.tr.code.name}"
+
+                # Get the inner result code
+                inner_code = op_result.tr.inner_result().code
+                return f"Operation failed: {inner_code.name}"
+
+        return f"Transaction failed: {result_code.name}"
+
+    except Exception as e:
+        return f"Failed to decode error XDR: {str(e)}"
 
 
 def send_tx(context, sender_keypair, transaction: TransactionBuilder):
@@ -33,10 +61,6 @@ def send_tx(context, sender_keypair, transaction: TransactionBuilder):
             break
 
     if tx_data.status == GetTransactionStatus.SUCCESS:
-        return _extract_scval_hex(tx_data.result_meta_xdr)
+        transaction_meta = stellar_xdr.TransactionMeta.from_xdr(tx_data.result_meta_xdr)
+        return transaction_meta.v3.soroban_meta.return_value
     raise RuntimeError(f"Transaction execution failed: {tx_data.result_xdr}")
-
-
-def _extract_scval_hex(result_meta_xdr: str) -> str:
-    meta = stellar_xdr.TransactionMeta.from_xdr(result_meta_xdr)
-    return meta.v3.soroban_meta.return_value.bytes.sc_bytes.hex()
