@@ -40,3 +40,25 @@ def step_create_employee_list(context, number):
 
     total_budget = sum(emp["budget"] for emp in context.employees)
     assert total_budget < 100_000, "Total budget does not match 100K USDC"
+
+
+@given("I have a list of employees with the following details")
+def step_create_employee_list_with_details(context):
+    """Create a list of employees with specific details from the table"""
+    context.employees = []
+
+    # Create employees from the table data
+    for row in context.table:
+        employee = {
+            "name": row["name"],
+            "account_id": generate_random_account_id(),
+            "budget": int(row["budget"]),
+        }
+        context.employees.append(employee)
+
+        # Fund the employee account
+        url = f"{context.stellar_url}/friendbot?addr={employee['account_id']}"
+        requests.get(url, timeout=30)
+
+    # Store total budget for later verification
+    context.total_employee_budget = sum(emp["budget"] for emp in context.employees)

@@ -11,7 +11,7 @@ Feature: Stellar Payroll System
             | owner | SAYLONVIPX22DMUBPQ3OYG4QRSZSTN7HGF4CTVGHKPKE3MO5L6K3DLIC |
 
     Scenario: Setup company with employees and initial funding
-        Given I have a list of "10" employees with the following details:
+        Given I have a list of employees with the following details:
             | name      | budget |
             | Employee1 | 10000  |
             | Employee2 | 10000  |
