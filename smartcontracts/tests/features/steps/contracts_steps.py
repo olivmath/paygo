@@ -73,23 +73,25 @@ def step_deploy_contracts(context):
 
 @when("admin deploys paygo contracts with token address and company wasm_id")
 def step_impl(context):
+    from stellar_sdk import scval
+
     admin_keypair = context.wallets["admin"]["keypair"]
 
     usdc_token_address = context.contracts["contract_id"]["token"]
     company_wasm_hash_id = context.contracts["wasm_hash_id"]["company"]
+    paygo_wasm_hash_id = context.contracts["wasm_hash_id"]["paygo"]
 
-    # Convert the hex string to bytes
-    company_wasm_hash_bytes = bytes.fromhex(company_wasm_hash_id)
+    print(usdc_token_address)
+    print(company_wasm_hash_id)
 
     init_args = [
-        convert_arg(usdc_token_address, "Address"),
-        convert_arg(company_wasm_hash_bytes, "Bytes")  # Pass the bytes directly
+        scval.to_address(usdc_token_address),
+        scval.to_bytes(company_wasm_hash_id.encode()),
     ]
 
     print("\n📦 Deploying PayGo contract")
     print(f"Initialization arguments: {init_args}")
 
-    wasm_hash_id = context.contracts["wasm_hash_id"]["paygo"]
-    contract_id = deploy_wasm(context, wasm_hash_id, admin_keypair, init_args)
+    contract_id = deploy_wasm(context, paygo_wasm_hash_id, admin_keypair, init_args)
 
     context.contracts["contract_id"]["paygo"] = contract_id
