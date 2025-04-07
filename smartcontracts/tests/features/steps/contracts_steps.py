@@ -1,4 +1,6 @@
 from behave import given, when
+from stellar_sdk import scval
+from utils.contracts.invoke import invoke_fn_in_contract
 from utils.contracts.types import convert_arg
 from utils.contracts.deploy import deploy_wasm, deploy_wasm_via_cli
 from utils.contracts.wasm import get_wasm_path
@@ -82,23 +84,57 @@ def step_impl(context):
     paygo_wasm_hash_id = context.contracts["wasm_hash_id"]["paygo"]
 
     contract_id = deploy_wasm_via_cli(
-        paygo_wasm_hash_id, admin_keypair, ["--usdc", usdc_token_address, "--company_wasm_hash", company_wasm_hash_id]
+        paygo_wasm_hash_id,
+        admin_keypair,
+        ["--usdc", usdc_token_address, "--company_wasm_hash", company_wasm_hash_id],
     )
 
     context.contracts["contract_id"]["paygo"] = contract_id
     return
 
-    print(usdc_token_address)
-    print(company_wasm_hash_id)
+    # I don't understand, but when I try to deploy via SDK it gives me the following error:
 
-    init_args = [
-        scval.to_address(usdc_token_address),
-        scval.to_bytes(company_wasm_hash_id.encode()),
-    ]
+    # Event log (newest first):
+    # 0: [Diagnostic Event] topics:[error, Error(Context, InvalidAction)], data:["constructor invocation has failed with error", Error(WasmVm, InvalidAction)]
+    # 1: [Failed Diagnostic Event (not emitted)] contract:CDK3X7X3LHQLB5XH4VZPF6QYL6UP3PWUL6IITGGUPQTNMXEQWPLZUU5M, topics:[error, Error(WasmVm, InvalidAction)], data:["VM call trapped: UnreachableCodeReached", __constructor]
+    # 2: [Diagnostic Event] topics:[fn_call, CDK3X7X3LHQLB5XH4VZPF6QYL6UP3PWUL6IITGGUPQTNMXEQWPLZUU5M, __constructor], data:[CCXG4HQSJHVQV6SYIQ7CGJ4F7TISVDUEWMLYPNAKTPP73KK3Q2XHOTUH, Bytes(34393938663666333834656364383732616365326465616433656331346138303062623835623031343639636238393734643036343161656137663264333364)]
 
-    print("\n📦 Deploying PayGo contract")
-    print(f"Initialization arguments: {init_args}")
+    # init_args = [
+    #     scval.to_address(usdc_token_address),
+    #     scval.to_bytes(company_wasm_hash_id.encode()),
+    # ]
 
-    contract_id = deploy_wasm(context, paygo_wasm_hash_id, admin_keypair, init_args)
+    # print("\n📦 Deploying PayGo contract")
+    # print(f"Initialization arguments: {init_args}")
 
-    context.contracts["contract_id"]["paygo"] = contract_id
+    # contract_id = deploy_wasm(context, paygo_wasm_hash_id, admin_keypair, init_args)
+
+    # context.contracts["contract_id"]["paygo"] = contract_id
+
+
+@when('admin mints "200000" USDC tokens to owner')
+def step_impl(context):
+    admin_keypair = context.wallets["admin"]["keypair"]
+    token_contract_id = context.contracts["contract_id"]["token"]
+    args = [scval.to_address(admin_keypair.public_key), scval.to_uint128(200000)]
+
+    invoke_fn_in_contract(context, token_contract_id, "mint", admin_keypair, args)
+
+
+@when('owner approves "100000" USDC to paygo contract')
+def step_impl(context):
+    raise NotImplementedError(
+        'STEP: When owner approves "100000" USDC to paygo contract'
+    )
+
+
+@then("all contracts should be deployed successfully")
+def step_impl(context):
+    raise NotImplementedError(
+        "STEP: Then all contracts should be deployed successfully"
+    )
+
+
+@then('owner should have "200000" USDC balance')
+def step_impl(context):
+    raise NotImplementedError('STEP: Then owner should have "200000" USDC balance')

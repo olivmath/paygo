@@ -1,12 +1,32 @@
 from stellar_sdk import scval
 
 
+def parse_result_xdr(result):
+    """
+    Parse the result from XDR format to a list of decoded strings.
+
+    Args:
+        result: The XDR result to parse, expected to be in a vector format.
+
+    Returns:
+        A list of decoded strings obtained from the XDR result.
+    """
+    return [scval.from_string(s).decode() for s in scval.from_vec(result)]
+
+
 def convert_arg(value, type_hint: str):
     """
-    Convert a value to the appropriate SCVal type
+    Convert a value to the appropriate SCVal type based on the provided type hint.
+
     Args:
-        value: The value to convert (can be str, bytes, or other types)
-        type_hint: The type to convert to (e.g. "Symbol", "String", "Bytes", etc)
+        value: The value to convert (can be str, bytes, or other types).
+        type_hint: The type to convert to (e.g. "Symbol", "String", "Bytes", etc).
+
+    Returns:
+        The converted value as an SCVal type.
+
+    Raises:
+        ValueError: If the provided type hint is unsupported.
     """
     type_converters = {
         "Symbol": scval.to_symbol,
