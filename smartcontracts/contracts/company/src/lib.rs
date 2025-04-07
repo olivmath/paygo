@@ -1,10 +1,11 @@
 #![no_std]
+#[allow(unused_variables)]
 
 pub mod storage;
 mod test;
 
 use soroban_sdk::{contract, contractimpl, Address, Env, Symbol, Vec};
-use storage::{State, EMPLOYEES, NAME, OWNER, STATE, USDC};
+use storage::{Employee, State, EMPLOYEES, NAME, OWNER, STATE, USDC};
 
 #[contract]
 pub struct Company;
@@ -48,7 +49,7 @@ impl Company {
             .find(|emp| emp.account_id == account_id)
     }
 
-    pub fn pay_employees(e: Env) -> bool {
+    pub fn pay_employees(_e: Env) -> bool {
         true
     }
 }

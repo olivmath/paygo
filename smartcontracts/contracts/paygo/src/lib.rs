@@ -5,9 +5,9 @@ pub mod storage;
 mod test;
 
 use error::Error;
-use soroban_sdk::token::Client as TokenClient;
-use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, IntoVal, Symbol, Val, Vec};
+use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, Symbol, Vec};
 use storage::{Employee, COMP_WASM, USDC};
+
 
 #[contract]
 pub struct PayGo;
@@ -25,10 +25,10 @@ impl PayGo {
     }
 
     pub fn create_company(
-        e: Env,
+        _e: Env,
         owner: Address,
-        company_name: Symbol,
-        employees: Vec<Employee>,
+        _company_name: Symbol,
+        _employees: Vec<Employee>,
     ) -> Result<bool, Error> {
         owner.require_auth();
 

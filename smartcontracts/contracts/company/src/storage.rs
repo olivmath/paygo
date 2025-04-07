@@ -9,10 +9,10 @@ pub struct State {
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Employee {
-    name: String,
-    account_id: Address,
-    budger: i128,
-    partial_payment: i128,
+    pub name: String,
+    pub account_id: Address,
+    pub budger: i128,
+    pub partial_payment: i128,
 }
 
 pub const NAME: Symbol = symbol_short!("NAME");
