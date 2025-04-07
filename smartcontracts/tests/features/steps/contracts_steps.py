@@ -1,6 +1,6 @@
 from behave import given, when
-from tests.features.steps.utils.contracts.types import convert_arg
-from utils.contracts.deploy import deploy_wasm
+from utils.contracts.types import convert_arg
+from utils.contracts.deploy import deploy_wasm, deploy_wasm_via_cli
 from utils.contracts.wasm import get_wasm_path
 from utils.contracts.upload import upload_wasm
 from utils.contracts.compile import compile_all_smartcontracts
@@ -80,6 +80,13 @@ def step_impl(context):
     usdc_token_address = context.contracts["contract_id"]["token"]
     company_wasm_hash_id = context.contracts["wasm_hash_id"]["company"]
     paygo_wasm_hash_id = context.contracts["wasm_hash_id"]["paygo"]
+
+    contract_id = deploy_wasm_via_cli(
+        paygo_wasm_hash_id, admin_keypair, ["--usdc", usdc_token_address, "--company_wasm_hash", company_wasm_hash_id]
+    )
+
+    context.contracts["contract_id"]["paygo"] = contract_id
+    return
 
     print(usdc_token_address)
     print(company_wasm_hash_id)
