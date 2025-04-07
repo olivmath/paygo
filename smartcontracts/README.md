@@ -1,6 +1,4 @@
-# Ultimate Stellar - People CRUD Contract
-
-This project implements a CRUD (Create, Read, Update, Delete) contract for managing People records on the Stellar blockchain using Soroban smart contracts.
+# Paygo
 
 ## Prerequisites
 
@@ -36,183 +34,126 @@ source <(stellar completion --shell zsh) # bash
 echo "source <(stellar completion --shell zsh)" >> ~/.zshrc # bash
 ```
 
-## Configure keys and Faucet
+5. Install Poetry
 
 ```bash
-stellar keys generate --global alice --network testnet --fund
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-## Project Structure
-
-5. Create a People Data Base Project
-
-```
-stellar contract init --name people-db .
-```
-
-6. Your project folders structures
+6. Install Python Dependencies
 
 ```bash
-ultimate-stellar/
-├── Cargo.toml
-├── README.md
-└── contracts
-    └── people-db
-        ├── Cargo.toml
-        ├── Makefile
-        └── src
-            ├── lib.rs
-            └── test.rs
-
-4 directories, 6 files
+poetry install
 ```
 
-7. Build your Smartcontracts
+## Documentation
 
-```bash
-cargo build --target wasm32-unknown-unknown --release
+### 1. Smart Contracts Overview
+
+The project consists of three main smart contracts that work together to create a payroll system on the Stellar blockchain:
+
+1. Token Contract (USDC)
+2. PayGo Contract
+3. Company Contract
+
+### 2. Contract Details
+
+#### Token Contract (USDC)
+
+The token contract implements a standard Soroban token interface with the following key features:
+
+- **Purpose**: Handles the USDC stablecoin operations for payroll payments
+- **Key Functions**:
+  - `mint`: Creates new tokens (admin only)
+  - `approve`: Allows spending allowance for another address
+  - `transfer`: Moves tokens between addresses
+  - `transfer_from`: Allows approved spenders to move tokens
+  - `balance`: Checks token balance
+  - `allowance`: Checks spending allowance
+- **Security Features**:
+  - Admin authentication for minting
+  - Negative amount checks
+  - Expiration ledger for approvals
+
+#### PayGo Contract
+
+The PayGo contract serves as the main orchestrator for the payroll system:
+
+- **Purpose**: Manages company creation and employee payroll processing
+- **Key Functions**:
+  - `create_company`: Creates a new company with:
+    - Company name
+    - List of employees and their budgets
+    - Automatic calculation of payment schedules
+  - **Validation Features**:
+    - Prevents empty employee lists
+    - Checks for duplicate employees
+    - Verifies sufficient USDC allowance
+- **Error Handling**:
+  - `EmptyEmployeeList`
+  - `InvalidEmployeeAccount`
+  - `DuplicateEmployee`
+  - `InsufficientAllowance`
+  - `InvokerNotExist`
+
+#### Company Contract
+
+The Company contract manages individual company operations:
+
+- **Purpose**: Handles company-specific operations and employee payments
+- **Key Functions**:
+  - `get_name`: Retrieves company name
+  - `get_employees`: Lists all employees
+  - `get_owner`: Returns company owner address
+  - `get_total_cost`: Calculates total payroll cost
+  - `pay_employees`: Processes payments to all employees
+- **Data Structures**:
+  - `Employee`: Stores employee information
+    - Name
+    - Account ID
+    - Budget
+    - Partial payment amount
+
+### 3. BDD Testing
+
+The project uses Behavior-Driven Development (BDD) testing with the following key scenarios:
+
+#### Main Test Scenario: "Stellar Payroll System"
+
+```gherkin
+Feature: Stellar Payroll System
+    As a company owner
+    I want to process payroll through Stellar blockchain
+    So that I can pay my employees automatically
 ```
 
-## Testing the Project
+#### Test Steps:
 
-Run the test suite:
+1. **Setup**:
 
-```bash
-cargo test
-```
+- Initialize Stellar network
+- Create admin and owner wallets
+- Create test employees
+- Compile all contracts
 
-# VERSION 1 (Manual)
+2. **Contract Deployment**:
 
-## Create a Company
+- Upload company, token, and paygo contracts
+- Initialize token contract
+- Initialize paygo contract
+- Mint initial USDC tokens to owner
 
-<details>
-<summary>Create a Company</summary>
+3. **Company Creation**:
 
-```bash
-participant Admin
-participant Owner
-participant Stellar
-participant TokenContract
-participant PaygoContract
+- Owner approves USDC to paygo (100K USDC)
+- Create company "Petrobras" with employees
+- Verify company creation
 
-Admin->>Stellar: Create & fund wallet "admin"
-Admin->>Stellar: Create & fund wallet "owner"
+4. **Validation Checks**:
 
-Admin->>Stellar: Upload Company contract
-Admin->>Stellar: Upload Token contract
-Admin->>Stellar: Upload Paygo contract
+- Verify company name
+- Confirm employee count
+- Validate total cost
+- Check USDC reserve
 
-Admin->>Stellar: Create Token contract
-Stellar->TokenContract: Token Deployed!
-TokenContract-->Admin: Token account-id
-
-Admin->>Stellar: Create Paygo contract
-Stellar->PaygoContract: Paygo Deployed!
-PaygoContract-->Admin: Paygo account-id
-
-Admin->>Stellar: Mint 200K USDC to Owner
-Stellar->TokenContract: Mint 200K USDC to Owner
-TokenContract-->>Owner: Transfer 200K USDC to Owner
-
-
-Owner->>Stellar: Approve 100K USDC to Paygo
-Stellar->TokenContract: Approved 100k from Owner to Paygo
-TokenContract-->>PaygoContract: Allowance set (100K) from Owner
-
-Owner->>Stellar: Create company
-Stellar->PaygoContract: createCompany("Petrobras", 100 employees)
-PaygoContract->CompanyContract: Company Deployed!
-CompanyContract-->PaygoContract: Company account-id
-
-PaygoContract->TokenContract: TransferFrom(from: Owner, to: Company, amount: 100k)
-TokenContract-->CompanyContract: Transfer 100K USDC
-PaygoContract-->>Owner: Company contract-id
-
-
-Owner->>Stellar: Pay Employees
-Stellar->CompanyContract: pay_employees()
-CompanyContract->TokenContract: Transfer 10KUSDC to Employee-1
-TokenContract-->Employee-1: transfer 10K usdc
-CompanyContract->TokenContract: Transfer 10KUSDC to Employee-2
-TokenContract-->Employee-2: transfer 10K usdc
-CompanyContract->TokenContract: Transfer 10KUSDC to Employee-3
-TokenContract-->Employee-3: transfer 10K usdc
-```
-
-</details>
-
-![](./documentation/assets/create-company.png)
-
-
-
-## Pay Employees
-# VERSION 2 (Auto)
-
-```bash
-participant Admin
-participant USDC
-participant Owner
-participant Paygo
-participant Backend
-participant Company
-
-// UPLOAD COMPANY
-Admin->Company: upload Company contract to Stellar Blockchain
-
-
-// FUND COMPANY
-Owner->USDC: approve(paygo, 100)
-
-// VALIDATE
-Owner->Paygo: create_company(name, description, list of employees)
-Paygo->Paygo: validate company must not empty employee list
-Paygo->Paygo: validate company must not not has any employee with invalid account id
-Paygo->Paygo: validate company must not has duplicated employee in list
-Paygo->Paygo: validate owner pay with `USDC` token
-Paygo->Paygo: calculate employee total cost
-Paygo->USDC: validate owner approve balance enough to cover total cost
-USDC-->Paygo: owner allowance 100
-
-
-// WRITE
-Paygo->Company: Instantiate company with owner data
-Company-->Paygo: return account id
-Paygo->USDC: Transfer 100 USDC to Company
-USDC-->Company: pay 100 USDC
-
-// RETURN
-Paygo-->Backend: [emit event] new company: account id
-
-
-// PAYMENT
-Backend->Company: call pay function
-Company->Employee1: pay 1 USDC
-Company->Employee2: pay 1 USDC
-Company->Employee3: pay 1 USDC
-Company->Employee4: pay 1 USDC
-Company->Employee5: pay 1 USDC
-
-// NEW BLOCK
-Paygo-->Backend: "new block"
-
-
-// PAYMENT
-Backend->Company: call pay function
-Company->Employee1: pay 1 USDC
-Company->Employee2: pay 1 USDC
-Company->Employee3: pay 1 USDC
-Company->Employee4: pay 1 USDC
-Company->Employee5: pay 1 USDC
-
-// NEW BLOCK
-Paygo-->Backend: "new block"
-
-
-// PAYMENT
-Backend->Company: call pay function
-Company->Employee1: pay 1 USDC
-Company->Employee2: pay 1 USDC
-Company->Employee3: pay 1 USDC
-Company->Employee4: pay 1 USDC
-Company->Employee5: pay 1 USDC
-```
+The testing framework uses Python with the Behave library for BDD testing, ensuring that all components work together as expected in a real-world scenario.

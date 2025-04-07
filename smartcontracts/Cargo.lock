@@ -243,7 +243,7 @@ dependencies = [
 
 [[package]]
 name = "company"
-version = "1.0.0"
+version = "0.2.0"
 dependencies = [
  "soroban-sdk",
 ]
@@ -599,13 +599,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
 
 [[package]]
-name = "hello-world"
-version = "0.0.0"
-dependencies = [
- "soroban-sdk",
-]
-
-[[package]]
 name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -827,7 +820,7 @@ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "paygo"
-version = "1.0.0"
+version = "0.2.0"
 dependencies = [
  "soroban-sdk",
 ]
