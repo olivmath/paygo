@@ -26,4 +26,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 stellar-sdk = {version = "^12.2.0", extras = ["soroban"]}
-requests = "^2.32.3"
+requests = "^2.32.4"
